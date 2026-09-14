@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王蓓瑶 · 产品操盘</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>W</text></svg>">
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  background: #000;
+  color: #1d1d1f;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+::selection { background: rgba(0,122,255,0.25); }
+
+/* ========== Scroll Hint ========== */
+.scroll-hint {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+.scroll-hint .chevron {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid rgba(255,255,255,0.7);
+  border-bottom: 2px solid rgba(255,255,255,0.7);
+  transform: rotate(45deg);
+  animation: bounceDown 2s infinite;
+}
+@keyframes bounceDown {
+  0%, 100% { transform: rotate(45deg) translate(0,0); }
+  50% { transform: rotate(45deg) translate(4px,4px); }
+}
+
+/* ========== Fold Screen Section (Hero) ========== */
+.fold-section {
+  position: relative;
+  height: 200vh; /* 滚动空间 */
+  background: #000;
+}
+.fold-stage {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1200px;
+}
+/* 背景渐变壁纸 */
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(94,92,230,0.5) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 30%, rgba(188,80,220,0.4) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 50% 80%, rgba(0,180,255,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 90%, rgba(0,220,180,0.25) 0%, transparent 50%),
+    linear-gradient(160deg, #0a0a1a 0%, #1a0a2e 40%, #0d1b2a 100%);
+  transition: filter 0.3s ease;
+}
+/* 折叠屏设备容器 */
+.fold-device {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(340px, 88vw);
+  height: min(700px, 80vh);
+  transform-style: preserve-3d;
+  transition: transform 0.1s linear;
+}
+.fold-half {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  transform-origin: center bottom;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.15);
+  overflow: hidden;
+}
+.fold-top {
+  top: 0;
+  border-radius: 32px 32px 0 0;
+  border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 30px;
+}
+.fold-bottom {
+  bottom: 0;
+  border-radius: 0 0 32px 32px;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 30px;
+  transform-origin: center top;
+}
+/* 折痕线 */
+.fold-hinge {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3) 20%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 80%, transparent);
+  z-index: 10;
+  transform: translateY(-0.5px);
+}
+/* 屏幕内容 */
+.hero-name {
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+}
+.hero-title {
+  font-size: clamp(15px, 2vw, 18px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.hero-tagline {
+  font-size: clamp(14px, 1.8vw, 17px);
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.hero-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hero-meta span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+/* 设备外框（边框光泽） */
+.fold-device::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.15));
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ========== Resume Content Section ========== */
+.resume-content {
+  position: relative;
+  background: linear-gradient(180deg, #0d1b2a 0%, #1a1a2e 10%, #f5f5f7 30%);
+  z-index: 10;
+  padding: 0 24px 80px;
+}
+.content-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* 毛玻璃卡片 */
+.glass-card {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 24px;
+  padding: 36px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.glass-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 节标题 */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0071e3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: #0071e3;
+  border-radius: 2px;
+}
+.section-title {
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+/* 个人信息卡片（顶部大卡） */
+.profile-card {
+  text-align: center;
+  padding: 48px 32px;
+}
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 24px rgba(110,108,230,0.25);
+  border: 3px solid rgba(255,255,255,0.8);
+}
+.profile-name {
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.profile-role {
+  font-size: 17px;
+  color: #6e6e73;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.profile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.profile-tags span {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(0,113,227,0.08);
+  color: #0071e3;
+  font-weight: 500;
+}
+.profile-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.profile-contact a {
+  font-size: 14px;
+  color: #6e6e73;
+  text-decoration: none;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.profile-contact a:hover { color: #0071e3; }
+.profile-contact svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* 时间轴 */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, #0071e3, #b850dc);
+  border-radius: 2px;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-dot {
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #0071e3;
+  box-shadow: 0 0 0 4px rgba(0,113,227,0.15);
+}
+.timeline-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0071e3;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.timeline-company {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 2px;
+}
+.timeline-role {
+  font-size: 14px;
+  color: #6e6e73;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.timeline-desc {
+  font-size: 15px;
+  color: #3a3a3c;
+  line-height: 1.7;
+}
+.timeline-desc p { margin-bottom: 8px; }
+.timeline-desc p:last-child { margin-bottom: 0; }
+.highlight {
+  display: inline-block;
+  padding: 1px 8px;
+  background: rgba(0,113,227,0.08);
+  border-radius: 6px;
+  font-weight: 600;
+  color: #0071e3;
+}
+
+/* 项目卡片网格 */
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.project-item {
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.project-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+}
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.project-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+.project-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #0071e3, #5856d6);
+  color: #fff;
+}
+.project-date {
+  font-size: 13px;
+  color: #86868b;
+  margin-bottom: 10px;
+}
+.project-desc {
+  font-size: 14px;
+  color: #3a3a3c;
+  line-height: 1.7;
+}
+.project-desc p { margin-bottom: 6px; }
+.project-desc p:last-child { margin-bottom: 0; }
+
+/* 自我评价 */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.skill-item {
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(0,113,227,0.04);
+  border: 1px solid rgba(0,113,227,0.1);
+}
+.skill-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0071e3, #5856d6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.skill-icon svg { width: 18px; height: 18px; }
+.skill-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 6px;
+}
+.skill-desc {
+  font-size: 13px;
+  color: #6e6e73;
+  line-height: 1.6;
+}
+
+/* 教育背景 */
+.edu-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.edu-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5856d6, #af52de);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+.edu-icon svg { width: 24px; height: 24px; }
+.edu-info { flex: 1; }
+.edu-school {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 2px;
+}
+.edu-major {
+  font-size: 14px;
+  color: #6e6e73;
+  margin-bottom: 8px;
+}
+.edu-date {
+  font-size: 13px;
+  color: #86868b;
+  margin-bottom: 12px;
+}
+.edu-awards {
+  font-size: 14px;
+  color: #3a3a3c;
+  line-height: 1.7;
+}
+.edu-awards strong {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+/* 发展规划 */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.plan-item {
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.plan-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #af52de;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.plan-text {
+  font-size: 14px;
+  color: #3a3a3c;
+  line-height: 1.7;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 24px;
+  color: #86868b;
+  font-size: 13px;
+}
+.footer a {
+  color: #0071e3;
+  text-decoration: none;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 640px) {
+  .glass-card { padding: 28px 20px; border-radius: 20px; }
+  .profile-card { padding: 36px 20px; }
+  .edu-item { flex-direction: column; gap: 12px; }
+  .timeline { padding-left: 24px; }
+  .timeline-dot { left: -24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 滚动提示 -->
+<div class="scroll-hint" id="scrollHint">
+  <span>下滑展开</span>
+  <div class="chevron"></div>
+</div>
+
+<!-- ========== 折叠屏 Hero 区 ========== -->
+<section class="fold-section" id="foldSection">
+  <div class="fold-stage" id="foldStage">
+    <div class="wallpaper"></div>
+    <div class="fold-device" id="foldDevice">
+      <div class="fold-half fold-top" id="foldTop">
+        <div class="hero-name">王蓓瑶</div>
+        <div class="hero-title">Product Operator</div>
+      </div>
+      <div class="fold-hinge"></div>
+      <div class="fold-half fold-bottom" id="foldBottom">
+        <div class="hero-tagline">产品操盘 · 渠道营销 · 新零售</div>
+        <div class="hero-meta">
+          <span>4年经验</span>
+          <span>北京</span>
+          <span>消费电子</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 简历内容 ========== -->
+<main class="resume-content">
+  <div class="content-inner">
+
+    <!-- 个人信息卡 -->
+    <div class="glass-card profile-card" id="profileCard">
+      <img class="profile-avatar" src="assets/avatar.png" alt="王蓓瑶">
+      <h1 class="profile-name">王蓓瑶</h1>
+      <p class="profile-role">产品操盘 / 渠道营销专家</p>
+      <div class="profile-tags">
+        <span>全渠道零售</span>
+        <span>即时零售 0→1</span>
+        <span>国补项目操盘</span>
+        <span>异业联合营销</span>
+      </div>
+      <div class="profile-contact">
+        <a href="tel:15100830704">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          151-0083-0704
+        </a>
+        <a href="mailto:15100830704@163.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          15100830704@163.com
+        </a>
+      </div>
+    </div>
+
+    <!-- 发展规划 -->
+    <div class="glass-card" id="planCard">
+      <div class="section-label">Growth Plan</div>
+      <h2 class="section-title">发展规划</h2>
+      <div class="plan-grid">
+        <div class="plan-item">
+          <div class="plan-label">语言 & 国际化</div>
+          <p class="plan-text">系统学习法语及法国商业文化，为深耕 GTM（Go-to-Market）方向、对接国际市场与跨国品牌资源打下基础，匹配国际商务发展路径。</p>
+        </div>
+        <div class="plan-item">
+          <div class="plan-label">效率 & 能力升级</div>
+          <p class="plan-text">持续学习 AI Agent 工具与业务场景的融合应用，探索用智能化手段提升渠道管理效率与团队运营效能。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工作经验 -->
+    <div class="glass-card" id="workCard">
+      <div class="section-label">Experience</div>
+      <h2 class="section-title">工作经验</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2024.02 – 2026.07</div>
+          <div class="timeline-company">北京佳润顺达商贸有限公司</div>
+          <div class="timeline-role">产品操盘 · 华为全国 TOP368 核心合作伙伴</div>
+          <div class="timeline-desc">
+            <p>基于华为渠道政策与消费市场洞察，制定全渠道产品营销策略与销售政策，联动线下渠道合作伙伴落地营销动作；通过多维度数据分析优化渠道结构与周转效率，协助制定年度商业 BP 与经营复盘。</p>
+            <p>深入跟踪二级市场价格走势，每日整合分析市场大盘价格趋势，基于市场动态制定产品采销节奏与渠道铺货策略，动态优化库存结构。</p>
+            <p><span class="highlight">2024.10–2025.05</span> 担任产品总操盘，统筹渠道政策拆解、终端营销赋能与团队管理，带领团队荣获 <span class="highlight">2025 年北京春季销售竞赛赛道第一名</span>。</p>
+            <p>带领 30 余人项目团队推进门店标准化运营与营销升级，所负责门店通过全国竞聘荣获<span class="highlight">"全国十佳门店"</span>称号。</p>
+            <p>2025 年 618 电商大促期间，策划线上线下一体化营销方案，打通门店私域与平台公域流量，实现单门店月度 GMV 提升 <span class="highlight">30 万元</span>。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2022.07 – 2023.10</div>
+          <div class="timeline-company">深圳慧通商务有限公司（华为全资子公司）</div>
+          <div class="timeline-role">新零售管培生</div>
+          <div class="timeline-desc">
+            <p>负责门店全链路零售运营与营销落地，统筹人货场管理与商圈异业营销，通过过程数据监控优化销售动作与营销效率。</p>
+            <p>统筹门店日常运营与目标达成，通过过程数据监控与绩效分析优化销售动作，所负责门店业绩稳居 <span class="highlight">区域 TOP3</span>。</p>
+            <p>联动万达商场开展场景化异业营销，策划金秋音乐会、新品品鉴会等百人级品牌活动，与商圈内多家品牌达成长期异业营销合作。</p>
+            <p>入职 6 个月获评<span class="highlight">手机销售达人（前 10%）</span>。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 项目经验 -->
+    <div class="glass-card" id="projectCard">
+      <div class="section-label">Projects</div>
+      <h2 class="section-title">项目经验</h2>
+      <div class="project-list">
+        <div class="project-item">
+          <div class="project-header">
+            <div class="project-name">国家以旧换新补贴项目</div>
+            <div class="project-badge">项目负责人</div>
+          </div>
+          <div class="project-date">2024.10 – 2026.07</div>
+          <div class="project-desc">
+            <p>2024 年度牵头搭建"品牌+渠道+场景"三方联合营销模式，与居然之家达成深度渠道合作，打通国补核销与联合推广链路；上线后手机销量月度增长 <span class="highlight">50%</span>，带动产品毛利提升 2–4 个百分点。</p>
+            <p>2025 年度与银联商务建立规范化渠道合作机制，完成流程标准化、一线营销培训、对账回款全链路管理，合作伙伴回款率达 <span class="highlight">99%</span>。</p>
+          </div>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <div class="project-name">即时零售项目</div>
+            <div class="project-badge">项目负责人</div>
+          </div>
+          <div class="project-date">2025.06 – 2026.07</div>
+          <div class="project-desc">
+            <p>负责五大即时零售平台的渠道拓展与营销运营，完成 13 家线上店铺从 0 到 1 搭建，针对不同平台流量特性制定差异化营销策略，打通线上国补营销核销链路。</p>
+            <p>搭建流量、转化、复购全链路数据运营体系，整体运营水平位居北京华为合作伙伴前 <span class="highlight">35%</span>。</p>
+            <p>拓展本地仓平台渠道，打造前置仓配送+即时营销的运营模式，上线首月月销量增长 <span class="highlight">20%</span>，毛利提升 3 个百分点。</p>
+          </div>
+        </div>
+        <div class="project-item">
+          <div class="project-header">
+            <div class="project-name">有为青年进校园 · 北理工迎新晚会</div>
+            <div class="project-badge">产业支撑</div>
+          </div>
+          <div class="project-date">2024.09 – 2024.10</div>
+          <div class="project-desc">
+            <p>前期统筹活动样机、商品机协调，对接广告位资源与活动预算，完成内购产品报价确认，保障活动营销物料与权益落地；后期负责内购群日常运营与用户维护，通过社群运营促进转化。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 教育背景 -->
+    <div class="glass-card" id="eduCard">
+      <div class="section-label">Education</div>
+      <h2 class="section-title">教育背景</h2>
+      <div class="edu-item">
+        <div class="edu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div class="edu-info">
+          <div class="edu-school">长沙理工大学</div>
+          <div class="edu-major">人力资源管理（本科）</div>
+          <div class="edu-date">2018.09 – 2022.06</div>
+          <div class="edu-awards">
+            <p><strong>在校奖项：</strong>湖南省大学生艺术展二等奖、社团"五四"先进个人、校级演讲比赛二等奖、"互联网+"大赛学院三等奖、"创青春"大学生创业大赛学院三等奖</p>
+            <p><strong>校园经历：</strong>作为经管学院负责人带领院队获全校健身操大赛二等奖；中南林业科技大学演讲比赛邀约评委</p>
+            <p><strong>方向积累：</strong>自主补充市场营销、国际商务相关知识，明确以消费电子行业渠道营销为长期发展方向。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 自我评价 -->
+    <div class="glass-card" id="evalCard">
+      <div class="section-label">About Me</div>
+      <h2 class="section-title">核心能力</h2>
+      <div class="skills-grid">
+        <div class="skill-item">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="skill-title">渠道与新零售营销</div>
+          <div class="skill-desc">熟悉消费电子行业全渠道零售模式，具备即时零售业态从 0 到 1 搭建经验，主导过大型渠道合作项目的全链路营销落地。</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <div class="skill-title">跨伙伴合作管理</div>
+          <div class="skill-desc">擅长联动品牌方、渠道方、场景方等多方资源，推进异业合作与联合营销，具备项目全流程管理与流程标准化能力。</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div class="skill-title">数据驱动营销优化</div>
+          <div class="skill-desc">通过多维度业务数据复盘营销效果，迭代渠道策略与零售运营方案；探索 AI Agent 与业务场景结合，提升团队管理与数据处理效率。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2026 王蓓瑶 · Designed with Apple-style Minimalism</p>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// ========== 折叠屏展开动画 ==========
+(function() {
+  const foldSection = document.getElementById('foldSection');
+  const foldStage = document.getElementById('foldStage');
+  const foldDevice = document.getElementById('foldDevice');
+  const foldTop = document.getElementById('foldTop');
+  const foldBottom = document.getElementById('foldBottom');
+  const scrollHint = document.getElementById('scrollHint');
+
+  // 总滚动距离 = foldSection 高度 - 视口高度
+  const totalScroll = foldSection.offsetHeight - window.innerHeight;
+
+  function lerp(start, end, t) {
+    return start + (end - start) * t;
+  }
+
+  function onScroll() {
+    const scrollY = window.scrollY;
+    // progress: 0 = 折叠态, 1 = 完全展开
+    let progress = Math.min(scrollY / totalScroll, 1);
+    // 缓动
+    const eased = progress < 0.5
+      ? 2 * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+    // 折叠屏展开：上半屏向上翻，下半屏向下翻
+    // 初始折叠时两屏紧贴，展开后分离
+    const spread = eased * window.innerHeight * 0.35; // 展开距离
+    const rotateAngle = eased * 90; // 旋转角度
+
+    foldTop.style.transform = `translateY(${-spread}px) rotateX(${-rotateAngle}deg)`;
+    foldBottom.style.transform = `translateY(${spread}px) rotateX(${rotateAngle}deg)`;
+
+    // 设备整体缩小并淡出
+    const deviceScale = lerp(1, 0.6, eased);
+    const deviceOpacity = lerp(1, 0, eased * 0.8);
+    foldDevice.style.transform = `translate(-50%, -50%) scale(${deviceScale})`;
+    foldDevice.style.opacity = deviceOpacity;
+
+    // 背景渐变随滚动变化
+    foldStage.style.opacity = lerp(1, 0.3, eased);
+
+    // 滚动提示淡出
+    if (progress > 0.05) {
+      scrollHint.style.opacity = '0';
+    } else {
+      scrollHint.style.opacity = '1';
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // 窗口 resize 时重新计算
+  window.addEventListener('resize', onScroll);
+})();
+
+// ========== 卡片滚动揭示动画 ==========
+(function() {
+  const cards = document.querySelectorAll('.glass-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+  cards.forEach(card => observer.observe(card));
+})();
+</script>
+</body>
+</html>
