@@ -2,551 +2,19 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>王蓓瑶 · 产品操盘</title>
+<meta name="description" content="王蓓瑶 · 产品操盘 / 渠道营销专家 —— 全渠道零售、即时零售 0→1、国补项目操盘、异业联合营销">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>W</text></svg>">
-<style>
-/* ========== Reset & Base ========== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
-  background: #000;
-  color: #1d1d1f;
-  overflow-x: hidden;
-  line-height: 1.6;
-}
-::selection { background: rgba(0,122,255,0.25); }
-
-/* ========== Scroll Hint ========== */
-.scroll-hint {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: rgba(255,255,255,0.7);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-}
-.scroll-hint .chevron {
-  width: 20px;
-  height: 20px;
-  border-right: 2px solid rgba(255,255,255,0.7);
-  border-bottom: 2px solid rgba(255,255,255,0.7);
-  transform: rotate(45deg);
-  animation: bounceDown 2s infinite;
-}
-@keyframes bounceDown {
-  0%, 100% { transform: rotate(45deg) translate(0,0); }
-  50% { transform: rotate(45deg) translate(4px,4px); }
-}
-
-/* ========== Fold Screen Section (Hero) ========== */
-.fold-section {
-  position: relative;
-  height: 200vh; /* 滚动空间 */
-  background: #000;
-}
-.fold-stage {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  perspective: 1200px;
-}
-/* 背景渐变壁纸 */
-.wallpaper {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(94,92,230,0.5) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 50% at 80% 30%, rgba(188,80,220,0.4) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 70% at 50% 80%, rgba(0,180,255,0.35) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 90% 90%, rgba(0,220,180,0.25) 0%, transparent 50%),
-    linear-gradient(160deg, #0a0a1a 0%, #1a0a2e 40%, #0d1b2a 100%);
-  transition: filter 0.3s ease;
-}
-/* 折叠屏设备容器 */
-.fold-device {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(340px, 88vw);
-  height: min(700px, 80vh);
-  transform-style: preserve-3d;
-  transition: transform 0.1s linear;
-}
-.fold-half {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  transform-origin: center bottom;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.15);
-  overflow: hidden;
-}
-.fold-top {
-  top: 0;
-  border-radius: 32px 32px 0 0;
-  border-bottom: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 30px;
-}
-.fold-bottom {
-  bottom: 0;
-  border-radius: 0 0 32px 32px;
-  border-top: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 30px;
-  transform-origin: center top;
-}
-/* 折痕线 */
-.fold-hinge {
-  position: absolute;
-  top: 50%;
-  left: 5%;
-  right: 5%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3) 20%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 80%, transparent);
-  z-index: 10;
-  transform: translateY(-0.5px);
-}
-/* 屏幕内容 */
-.hero-name {
-  font-size: clamp(36px, 6vw, 52px);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.02em;
-  margin-bottom: 8px;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.2);
-}
-.hero-title {
-  font-size: clamp(15px, 2vw, 18px);
-  font-weight: 400;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-.hero-tagline {
-  font-size: clamp(14px, 1.8vw, 17px);
-  color: rgba(255,255,255,0.85);
-  font-weight: 500;
-  margin-bottom: 12px;
-}
-.hero-meta {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.hero-meta span {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  padding: 4px 12px;
-  border-radius: 100px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-/* 设备外框（边框光泽） */
-.fold-device::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 34px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.15));
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* ========== Resume Content Section ========== */
-.resume-content {
-  position: relative;
-  background: linear-gradient(180deg, #0d1b2a 0%, #1a1a2e 10%, #f5f5f7 30%);
-  z-index: 10;
-  padding: 0 24px 80px;
-}
-.content-inner {
-  max-width: 860px;
-  margin: 0 auto;
-}
-
-/* 毛玻璃卡片 */
-.glass-card {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.6);
-  border-radius: 24px;
-  padding: 36px 32px;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.glass-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 节标题 */
-.section-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #0071e3;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
-.section-label::before {
-  content: '';
-  width: 24px;
-  height: 2px;
-  background: #0071e3;
-  border-radius: 2px;
-}
-.section-title {
-  font-size: clamp(24px, 4vw, 32px);
-  font-weight: 700;
-  color: #1d1d1f;
-  margin-bottom: 24px;
-  letter-spacing: -0.01em;
-}
-
-/* 个人信息卡片（顶部大卡） */
-.profile-card {
-  text-align: center;
-  padding: 48px 32px;
-}
-.profile-avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  margin: 0 auto 20px;
-  box-shadow: 0 8px 24px rgba(110,108,230,0.25);
-  border: 3px solid rgba(255,255,255,0.8);
-}
-.profile-name {
-  font-size: clamp(28px, 5vw, 38px);
-  font-weight: 700;
-  color: #1d1d1f;
-  margin-bottom: 6px;
-  letter-spacing: -0.02em;
-}
-.profile-role {
-  font-size: 17px;
-  color: #6e6e73;
-  font-weight: 500;
-  margin-bottom: 20px;
-}
-.profile-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-.profile-tags span {
-  font-size: 13px;
-  padding: 6px 14px;
-  border-radius: 100px;
-  background: rgba(0,113,227,0.08);
-  color: #0071e3;
-  font-weight: 500;
-}
-.profile-contact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(0,0,0,0.06);
-}
-.profile-contact a {
-  font-size: 14px;
-  color: #6e6e73;
-  text-decoration: none;
-  transition: color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.profile-contact a:hover { color: #0071e3; }
-.profile-contact svg { width: 16px; height: 16px; flex-shrink: 0; }
-
-/* 时间轴 */
-.timeline {
-  position: relative;
-  padding-left: 28px;
-}
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: linear-gradient(180deg, #0071e3, #b850dc);
-  border-radius: 2px;
-}
-.timeline-item {
-  position: relative;
-  margin-bottom: 32px;
-}
-.timeline-item:last-child { margin-bottom: 0; }
-.timeline-dot {
-  position: absolute;
-  left: -28px;
-  top: 6px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid #0071e3;
-  box-shadow: 0 0 0 4px rgba(0,113,227,0.15);
-}
-.timeline-date {
-  font-size: 13px;
-  font-weight: 600;
-  color: #0071e3;
-  margin-bottom: 4px;
-  letter-spacing: 0.02em;
-}
-.timeline-company {
-  font-size: 18px;
-  font-weight: 700;
-  color: #1d1d1f;
-  margin-bottom: 2px;
-}
-.timeline-role {
-  font-size: 14px;
-  color: #6e6e73;
-  font-weight: 500;
-  margin-bottom: 12px;
-}
-.timeline-desc {
-  font-size: 15px;
-  color: #3a3a3c;
-  line-height: 1.7;
-}
-.timeline-desc p { margin-bottom: 8px; }
-.timeline-desc p:last-child { margin-bottom: 0; }
-.highlight {
-  display: inline-block;
-  padding: 1px 8px;
-  background: rgba(0,113,227,0.08);
-  border-radius: 6px;
-  font-weight: 600;
-  color: #0071e3;
-}
-
-/* 项目卡片网格 */
-.project-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.project-item {
-  padding: 24px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.5);
-  border: 1px solid rgba(0,0,0,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.project-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
-}
-.project-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.project-name {
-  font-size: 17px;
-  font-weight: 700;
-  color: #1d1d1f;
-}
-.project-badge {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 100px;
-  background: linear-gradient(135deg, #0071e3, #5856d6);
-  color: #fff;
-}
-.project-date {
-  font-size: 13px;
-  color: #86868b;
-  margin-bottom: 10px;
-}
-.project-desc {
-  font-size: 14px;
-  color: #3a3a3c;
-  line-height: 1.7;
-}
-.project-desc p { margin-bottom: 6px; }
-.project-desc p:last-child { margin-bottom: 0; }
-
-/* 自我评价 */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-.skill-item {
-  padding: 20px;
-  border-radius: 16px;
-  background: rgba(0,113,227,0.04);
-  border: 1px solid rgba(0,113,227,0.1);
-}
-.skill-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #0071e3, #5856d6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  color: #fff;
-}
-.skill-icon svg { width: 18px; height: 18px; }
-.skill-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1d1d1f;
-  margin-bottom: 6px;
-}
-.skill-desc {
-  font-size: 13px;
-  color: #6e6e73;
-  line-height: 1.6;
-}
-
-/* 教育背景 */
-.edu-item {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-.edu-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #5856d6, #af52de);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: #fff;
-}
-.edu-icon svg { width: 24px; height: 24px; }
-.edu-info { flex: 1; }
-.edu-school {
-  font-size: 18px;
-  font-weight: 700;
-  color: #1d1d1f;
-  margin-bottom: 2px;
-}
-.edu-major {
-  font-size: 14px;
-  color: #6e6e73;
-  margin-bottom: 8px;
-}
-.edu-date {
-  font-size: 13px;
-  color: #86868b;
-  margin-bottom: 12px;
-}
-.edu-awards {
-  font-size: 14px;
-  color: #3a3a3c;
-  line-height: 1.7;
-}
-.edu-awards strong {
-  color: #1d1d1f;
-  font-weight: 600;
-}
-
-/* 发展规划 */
-.plan-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-.plan-item {
-  padding: 24px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.6);
-  border: 1px solid rgba(0,0,0,0.05);
-}
-.plan-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #af52de;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.plan-text {
-  font-size: 14px;
-  color: #3a3a3c;
-  line-height: 1.7;
-}
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 40px 24px;
-  color: #86868b;
-  font-size: 13px;
-}
-.footer a {
-  color: #0071e3;
-  text-decoration: none;
-}
-
-/* ========== Responsive ========== */
-@media (max-width: 640px) {
-  .glass-card { padding: 28px 20px; border-radius: 20px; }
-  .profile-card { padding: 36px 20px; }
-  .edu-item { flex-direction: column; gap: 12px; }
-  .timeline { padding-left: 24px; }
-  .timeline-dot { left: -24px; }
-}
-</style>
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/build/three.module.js",
+    "three/addons/": "./vendor/three/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -556,23 +24,37 @@ body {
   <div class="chevron"></div>
 </div>
 
-<!-- ========== 折叠屏 Hero 区 ========== -->
+<!-- ========== iPhone Duo 折叠屏 Hero 区（滚动展开引导） ========== -->
 <section class="fold-section" id="foldSection">
   <div class="fold-stage" id="foldStage">
-    <div class="wallpaper"></div>
-    <div class="fold-device" id="foldDevice">
-      <div class="fold-half fold-top" id="foldTop">
-        <div class="hero-name">王蓓瑶</div>
-        <div class="hero-title">Product Operator</div>
+    <div class="wallpaper" id="wallpaper"></div>
+    <div id="viewport" aria-label="iPhone Duo 三维模型：滚动展开设备，左右拖拽调整视角"></div>
+    <div class="hero-overlay" id="heroOverlay">
+      <div class="hero-head">
+        <h1 class="hero-name">王蓓瑶</h1>
+        <p class="hero-title">Product Operator</p>
       </div>
-      <div class="fold-hinge"></div>
-      <div class="fold-half fold-bottom" id="foldBottom">
-        <div class="hero-tagline">产品操盘 · 渠道营销 · 新零售</div>
+      <div class="hero-foot">
+        <p class="hero-tagline">产品操盘 · 渠道营销 · 新零售</p>
         <div class="hero-meta">
           <span>4年经验</span>
           <span>北京</span>
           <span>消费电子</span>
         </div>
+      </div>
+    </div>
+    <div class="hero-loading" id="heroLoading">
+      <div class="spinner"></div>
+      <p>正在加载 iPhone Duo…</p>
+    </div>
+    <div class="hero-fallback" id="heroFallback">
+      <h1 class="hero-name">王蓓瑶</h1>
+      <p class="hero-title">Product Operator</p>
+      <p class="hero-tagline">产品操盘 · 渠道营销 · 新零售</p>
+      <div class="hero-meta">
+        <span>4年经验</span>
+        <span>北京</span>
+        <span>消费电子</span>
       </div>
     </div>
   </div>
@@ -585,7 +67,7 @@ body {
     <!-- 个人信息卡 -->
     <div class="glass-card profile-card" id="profileCard">
       <img class="profile-avatar" src="assets/avatar.png" alt="王蓓瑶">
-      <h1 class="profile-name">王蓓瑶</h1>
+      <h2 class="profile-name">王蓓瑶</h2>
       <p class="profile-role">产品操盘 / 渠道营销专家</p>
       <div class="profile-tags">
         <span>全渠道零售</span>
@@ -753,64 +235,7 @@ body {
 </main>
 
 <script>
-// ========== 折叠屏展开动画 ==========
-(function() {
-  const foldSection = document.getElementById('foldSection');
-  const foldStage = document.getElementById('foldStage');
-  const foldDevice = document.getElementById('foldDevice');
-  const foldTop = document.getElementById('foldTop');
-  const foldBottom = document.getElementById('foldBottom');
-  const scrollHint = document.getElementById('scrollHint');
-
-  // 总滚动距离 = foldSection 高度 - 视口高度
-  const totalScroll = foldSection.offsetHeight - window.innerHeight;
-
-  function lerp(start, end, t) {
-    return start + (end - start) * t;
-  }
-
-  function onScroll() {
-    const scrollY = window.scrollY;
-    // progress: 0 = 折叠态, 1 = 完全展开
-    let progress = Math.min(scrollY / totalScroll, 1);
-    // 缓动
-    const eased = progress < 0.5
-      ? 2 * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-    // 折叠屏展开：上半屏向上翻，下半屏向下翻
-    // 初始折叠时两屏紧贴，展开后分离
-    const spread = eased * window.innerHeight * 0.35; // 展开距离
-    const rotateAngle = eased * 90; // 旋转角度
-
-    foldTop.style.transform = `translateY(${-spread}px) rotateX(${-rotateAngle}deg)`;
-    foldBottom.style.transform = `translateY(${spread}px) rotateX(${rotateAngle}deg)`;
-
-    // 设备整体缩小并淡出
-    const deviceScale = lerp(1, 0.6, eased);
-    const deviceOpacity = lerp(1, 0, eased * 0.8);
-    foldDevice.style.transform = `translate(-50%, -50%) scale(${deviceScale})`;
-    foldDevice.style.opacity = deviceOpacity;
-
-    // 背景渐变随滚动变化
-    foldStage.style.opacity = lerp(1, 0.3, eased);
-
-    // 滚动提示淡出
-    if (progress > 0.05) {
-      scrollHint.style.opacity = '0';
-    } else {
-      scrollHint.style.opacity = '1';
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  // 窗口 resize 时重新计算
-  window.addEventListener('resize', onScroll);
-})();
-
-// ========== 卡片滚动揭示动画 ==========
+// 卡片滚动揭示动画（独立于 3D 模块，保证任何情况下简历内容可见）
 (function() {
   const cards = document.querySelectorAll('.glass-card');
   const observer = new IntersectionObserver((entries) => {
@@ -824,5 +249,6 @@ body {
   cards.forEach(card => observer.observe(card));
 })();
 </script>
+<script type="module" src="./main.js"></script>
 </body>
 </html>
